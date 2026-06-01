@@ -14,7 +14,7 @@ RUN npm run build
 FROM php:8.2-apache
 
 RUN apt-get update \
-  && apt-get install -y git unzip libpq-dev libzip-dev zlib1g-dev libonig-dev --no-install-recommends \
+  && apt-get install -y git unzip libpq-dev libzip-dev zlib1g-dev libonig-dev curl --no-install-recommends \
   && docker-php-ext-install pdo pdo_pgsql mbstring zip \
   && a2enmod rewrite \
   && rm -rf /var/lib/apt/lists/*
@@ -31,10 +31,13 @@ COPY . /var/www/html
 COPY --from=node-builder /app/public /var/www/html/public
 
 # Install PHP dependencies and prepare app
-RUN COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev --optimize-autoloader --no-interaction --no-progress \
-  && php artisan key:generate --force \
-  && php artisan config:cache \
-  && chown -R www-data:www-data storage bootstrap/cache
+RUN COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+
+RUN php artisan key:generate --force
+
+RUN php artisan config:cache
+
+RUN chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 80
 
