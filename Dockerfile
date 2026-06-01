@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json vite.config.js ./
 COPY resources resources
 COPY public public
-RUN npm ci
+RUN npm install
 RUN npm run build
 
 # 2) PHP stage - run Laravel on Apache with PDO_PGSQL
