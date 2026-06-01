@@ -38,9 +38,10 @@ COPY --from=node-builder /app/public /var/www/html/public
 RUN echo "BUILD_MARKER=render-dockerfile-b2fbe0b" \
   && COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
-# Create .env placeholder (will be overridden at runtime by Render env vars)
-RUN echo "APP_KEY=SomeRandomStringOf32Characters\nDB_CONNECTION=pgsql" > .env
+# Create a placeholder .env so artisan can run during build
+RUN printf "APP_NAME=Laravel\nAPP_ENV=production\nAPP_KEY=base64:0123456789abcdef0123456789abcdef\nAPP_DEBUG=false\nAPP_URL=http://localhost\nDB_CONNECTION=pgsql\n" > .env
 
+RUN php artisan key:generate --force --no-interaction
 RUN php artisan config:cache
 
 RUN chown -R www-data:www-data storage bootstrap/cache
