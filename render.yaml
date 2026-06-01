@@ -11,4 +11,4 @@ services:
     autoDeploy: true
     buildCommand: ""
     startCommand: ""
-    releaseCommand: "php artisan migrate --force"
+    releaseCommand: "php artisan config:cache && php artisan migrate --force"
