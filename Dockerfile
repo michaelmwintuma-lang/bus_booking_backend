@@ -31,7 +31,7 @@ COPY . /var/www/html
 COPY --from=node-builder /app/public /var/www/html/public
 
 # Install PHP dependencies and prepare app
-RUN composer install --no-dev --optimize-autoloader --no-interaction \
+RUN COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev --optimize-autoloader --no-interaction --no-progress \
   && php artisan key:generate --force \
   && php artisan config:cache \
   && chown -R www-data:www-data storage bootstrap/cache
