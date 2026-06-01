@@ -22,6 +22,10 @@ RUN apt-get update \
 # Copy composer from official image
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Set Apache document root to Laravel public directory
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf /etc/apache2/apache2.conf
+
 WORKDIR /var/www/html
 
 # Copy application source
