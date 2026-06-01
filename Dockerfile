@@ -33,7 +33,8 @@ COPY --from=node-builder /app/public /var/www/html/public
 # Install PHP dependencies and prepare app
 RUN COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
-RUN php artisan key:generate --force
+# Create .env placeholder (will be overridden at runtime by Render env vars)
+RUN echo "APP_KEY=SomeRandomStringOf32Characters\nDB_CONNECTION=pgsql" > .env
 
 RUN php artisan config:cache
 
