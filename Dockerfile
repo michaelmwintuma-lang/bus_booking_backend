@@ -1,4 +1,5 @@
 # Multi-stage Dockerfile for Laravel + Vite
+# Cache buster: 2026-06-01
 
 # 1) Node stage - build frontend assets
 FROM node:18 AS node-builder
