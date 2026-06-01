@@ -1,0 +1,14 @@
+# Render service definition for Docker-deployed Laravel app
+# Note: Set sensitive env vars (DB credentials, APP_KEY) in the Render dashboard, not in this file.
+services:
+  - type: web
+    name: bus-booking-backend
+    env: docker
+    branch: main
+    plan: starter
+    dockerfilePath: Dockerfile
+    path: /
+    autoDeploy: true
+    buildCommand: ""
+    startCommand: ""
+    releaseCommand: "php artisan migrate --force"
